@@ -3,7 +3,7 @@
 **A logarithmic reference frame of time scales for gravitational and quantum systems**
 **Un référentiel logarithmique des échelles de temps pour les systèmes gravitationnels et quantiques**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23106130.svg)](https://doi.org/10.5281/zenodo.23106130)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23107603.svg)](https://doi.org/10.5281/zenodo.23107603)
 
 **Frédérick Vronsky** — Independent researcher in theoretical cosmology / Chercheur indépendant en cosmologie théorique, Toulouse
 ORCID: [0009-0003-5719-9604](https://orcid.org/0009-0003-5719-9604) · Version 1.1 · October / octobre 2026 · CC BY-NC-SA 4.0
@@ -48,13 +48,14 @@ In the space of the logarithms of these times:
 | Path | Contents |
 |---|---|
 | `Temporal_fingerprints_EN.pdf`, `Empreintes_temporelles_FR.pdf` | the paper in English and French (16 pages each) |
-| `papier/*.tex` | XeLaTeX sources |
+| `code_python.zip` | Python code and LaTeX sources: unzip it to get the `code/` and `papier/` folders described below |
 | `code/empreintes.py` | Python module: fingerprint, relative state, log matrix, hyperplanes and residuals, kernel elimination, uncertainty propagation, quantum extension, Hubble sphere |
 | `code/test_empreintes.py` | numerical tests of the paper's identities (10 tests) |
 | `code/verifier_equations.py` | symbolic check (sympy) of every equation (36 checks) |
 | `code/reproduire_papier.py` | recomputes every number, the atlas and the figures |
 | `atlas_temporel.csv`, `code/atlas.py` | temporal atlas of 33 systems, with sources (regenerated in `code/`) |
 | `code/figures.py` | figures in French and English |
+| `papier/*.tex` | XeLaTeX sources of the paper |
 | `banc_empreintes.html` | interactive bench |
 
 **The atlas (`atlas_temporel.csv`)** covers 33 systems, from the proton to the Hubble sphere: Earth, Solar System, pulsars, black holes, quantum experiments and cosmos. Each row gives:
@@ -74,6 +75,7 @@ The bench interface is in French.
 ### Usage
 
 ```bash
+unzip code_python.zip                     # creates code/ and papier/
 pip install -r code/requirements.txt      # numpy, scipy, matplotlib, sympy
 cd code
 python test_empreintes.py                 # numerical tests
@@ -128,13 +130,14 @@ Dans l'espace des logarithmes de ces temps :
 | Chemin | Contenu |
 |---|---|
 | `Empreintes_temporelles_FR.pdf`, `Temporal_fingerprints_EN.pdf` | l'article en français et en anglais (16 pages chacun) |
-| `papier/*.tex` | sources XeLaTeX |
+| `code_python.zip` | code Python et sources LaTeX : à décompresser pour obtenir les dossiers `code/` et `papier/` décrits ci-dessous |
 | `code/empreintes.py` | module Python : empreinte, état relatif, matrice logarithmique, hyperplans et résidus, élimination par noyau, propagation des incertitudes, extension quantique, sphère de Hubble |
 | `code/test_empreintes.py` | tests numériques des identités du papier (10 tests) |
 | `code/verifier_equations.py` | vérification symbolique (sympy) de chaque équation (36 vérifications) |
 | `code/reproduire_papier.py` | recalcule tous les nombres, l'atlas et les figures |
 | `atlas_temporel.csv`, `code/atlas.py` | atlas temporel de 33 systèmes, avec sources (régénéré dans `code/`) |
 | `code/figures.py` | figures en français et en anglais |
+| `papier/*.tex` | sources XeLaTeX de l'article |
 | `banc_empreintes.html` | banc interactif |
 
 **L'atlas (`atlas_temporel.csv`)** couvre 33 systèmes, du proton à la sphère de Hubble : Terre, Système solaire, pulsars, trous noirs, expériences quantiques et cosmos. Chaque ligne donne :
@@ -154,6 +157,7 @@ Les noms de colonnes et la colonne « regime » sont en anglais.
 ### Utilisation
 
 ```bash
+unzip code_python.zip                     # crée code/ et papier/
 pip install -r code/requirements.txt      # numpy, scipy, matplotlib, sympy
 cd code
 python test_empreintes.py                 # tests numériques
@@ -174,7 +178,7 @@ Pour compiler l'article, lancez `cd papier && xelatex empreintes_fr.tex` deux fo
 
 ## Citation
 
-> Vronsky, F. (2026). *Temporal fingerprints: a logarithmic reference frame of time scales for gravitational and quantum systems* (v1.0). Zenodo. https://doi.org/10.5281/zenodo.23106130
+> Vronsky, F. (2026). *Temporal fingerprints: a logarithmic reference frame of time scales for gravitational and quantum systems* (v1.1). Zenodo. https://doi.org/10.5281/zenodo.23107603
 
 See also / voir aussi `CITATION.cff`.
 
