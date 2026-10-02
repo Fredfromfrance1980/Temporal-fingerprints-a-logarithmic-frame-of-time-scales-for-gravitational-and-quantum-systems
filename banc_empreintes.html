@@ -1,0 +1,278 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Banc des empreintes temporelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Banc d'instrument : réglages à gauche, lectures à droite, trois cartes en pleine largeur ; une colonne sur téléphone */
+:root{
+  --bg:#eef1f4; --panel:#ffffff; --ink:#14202c; --muted:#5b6876; --line:#d3dae2;
+  --accent:#2445c9; --accent-soft:#dfe5fb; --hot:#c4420f; --hot-soft:#fbe6dc; --ok:#1f7a4d; --ok-soft:#dcf1e5;
+  --cloud:#8aa9d6; --grid:#e3e8ee; --shade:#f3e4dc;
+  --f-display:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f151c; --panel:#17202a; --ink:#e4eaf1; --muted:#97a4b2; --line:#2b3744;
+  --accent:#8ea4ff; --accent-soft:#222c55; --hot:#ff8a57; --hot-soft:#3d2316; --ok:#5fd39a; --ok-soft:#173527;
+  --cloud:#4f6f9c; --grid:#222d38; --shade:#33241c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f151c; --panel:#17202a; --ink:#e4eaf1; --muted:#97a4b2; --line:#2b3744;
+  --accent:#8ea4ff; --accent-soft:#222c55; --hot:#ff8a57; --hot-soft:#3d2316; --ok:#5fd39a; --ok-soft:#173527;
+  --cloud:#4f6f9c; --grid:#222d38; --shade:#33241c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:grid;gap:18px}
+header h1{font-family:var(--f-display);font-weight:700;font-size:clamp(24px,3.4vw,34px);margin:0;letter-spacing:-.01em;text-wrap:balance}
+header p{margin:4px 0 0;color:var(--muted);max-width:75ch}
+.bench{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:860px){.bench{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:14px;min-width:0}
+.panel h2{font-family:var(--f-display);font-weight:500;font-size:16px;margin:0}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{font:500 12px var(--f-body);border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:4px 10px;cursor:pointer}
+.presets button:hover{border-color:var(--accent)}
+.presets button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.presets .q[aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.field{display:grid;gap:4px}
+.field label{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;font-weight:500}
+.field output{font-family:var(--f-mono);font-size:12px;color:var(--accent);white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--accent)}
+select{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 6px;width:100%}
+.toggle{display:flex;gap:8px;align-items:center;font-size:13px}
+.sep{border:0;border-top:1px solid var(--line);margin:2px 0}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.cell{border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.cell .k{font-size:11.5px;color:var(--muted)}
+.cell .v{font-family:var(--f-mono);font-size:15px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.cell .s{font-size:11.5px;color:var(--muted)}
+.flags{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;border-radius:999px;padding:3px 10px;border:1px solid var(--line)}
+.chip.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.chip.hot{background:var(--hot-soft);border-color:transparent;color:var(--hot)}
+.chip.info{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.maps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:1000px){.maps{grid-template-columns:minmax(0,1fr)}}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:var(--f-body);font-size:11px;fill:var(--muted)}
+svg .lab{fill:var(--ink);font-size:10.5px}
+.cap{font-size:12.5px;color:var(--muted);margin:0}
+.ladder-wrap{overflow-x:auto}
+footer{font-size:12px;color:var(--muted);max-width:95ch}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style></head><body>
+
+<div class="wrap">
+<header>
+  <h1>Banc des empreintes temporelles</h1>
+  <p>Choisis un système ou règle masse, distance et horloge observée. Le banc calcule son empreinte (T<sub>P</sub>, T<sub>G</sub>, T<sub>C</sub>, T<sub>obs</sub> et, pour une particule quantique, le temps de Compton réduit T<sub>Q</sub>) et la place sur les trois cartes du papier « Empreintes temporelles ».</p>
+</header>
+
+<div class="bench">
+ <section class="panel" aria-label="Réglages">
+  <div><p class="eyebrow">Systèmes de l'atlas</p><div class="presets" id="presetsC"></div></div>
+  <div><p class="eyebrow">Particules en superposition</p><div class="presets" id="presetsQ"></div></div>
+  <hr class="sep">
+  <h2>Système</h2>
+  <div class="field"><label for="sM"><span>Masse M</span> <output id="oM"></output></label><input id="sM" type="range" min="-30" max="45" step="0.01"></div>
+  <div class="field"><label for="sR"><span>Longueur R</span> <output id="oR"></output></label><input id="sR" type="range" min="-9" max="27" step="0.01"></div>
+  <div class="field"><label for="sT"><span>Horloge observée T<sub>obs</sub></span> <output id="oT"></output></label><input id="sT" type="range" min="-6" max="18" step="0.01"></div>
+  <div class="field"><label for="clock"><span>Nature de T<sub>obs</sub></span></label>
+   <select id="clock"><option value="orb">Période orbitale (calque de Kepler, constante 2π)</option><option value="gw">Période d'onde gravitationnelle (constante π)</option><option value="other">Autre horloge (rotation, superposition…)</option></select></div>
+  <p class="cap">Pour une orbite, le rapport au calque K<sub>T</sub> = T<sub>obs</sub>/T<sub>Kepler</sub> n'est un test que si R et M sont mesurés indépendamment de T<sub>obs</sub>.</p>
+  <hr class="sep">
+  <label class="toggle" for="qOn"><input id="qOn" type="checkbox"> Ajouter une particule quantique</label>
+  <div id="qBox" class="panel" style="padding:12px;gap:10px">
+   <div class="field"><label for="sm"><span>Masse m</span> <output id="om"></output></label><input id="sm" type="range" min="-30" max="-3" step="0.01"></div>
+   <div class="field"><label for="sdx"><span>Écart entre branches Δx</span> <output id="odx"></output></label><input id="sdx" type="range" min="-9" max="1" step="0.01"></div>
+   <div class="field"><label for="hclock"><span>Horloge interne</span></label>
+    <select id="hclock"><option value="0">Aucune</option><option value="nv">Spin NV, micro-onde (2,87 GHz)</option><option value="opt" selected>Horloge optique (2 eV)</option><option value="th">Thorium 229, nucléaire (8,4 eV)</option></select></div>
+   <span class="cap">Durée de superposition : T<sub>obs</sub>. Branches séparées verticalement dans le champ g = GM/R² du système. Les écarts de temps propre affichés sont des majorants.</span>
+  </div>
+ </section>
+
+ <section class="panel">
+  <h2 id="name">—</h2>
+  <div class="ladder-wrap"><svg id="ladder" viewBox="0 0 760 92" role="img" aria-label="Échelle logarithmique des temps de l'empreinte"></svg></div>
+  <div class="readout" id="rel"></div>
+  <div class="flags" id="flags"></div>
+ </section>
+</div>
+
+<div class="maps">
+ <div class="panel"><h2>Carte 1 · plan des horloges (X, O)</h2><svg id="map1" viewBox="0 0 420 320"></svg>
+  <p class="cap">Figure centrale du référentiel. Droite pleine : calque de Kepler O√X = 2π ; tiretée : horloge d'onde gravitationnelle, O√X = π. Points : systèmes de l'atlas munis d'une horloge.</p></div>
+ <div class="panel"><h2>Carte 2 · plan (X, Y)</h2><svg id="map2" viewBox="0 0 420 320"></svg>
+  <p class="cap">Seuils : R &lt; r<sub>s</sub> (X = 1/2), dernière orbite stable (X = 1/6), masse de Planck (Y = 1), longueur de Planck (XY = 1), longueur de Compton réduite (XY² = 1). Ce plan est l'image affine du diagramme masse–taille.</p></div>
+ <div class="panel"><h2>Carte 3 · quadrants quantiques</h2><svg id="map3" viewBox="0 0 420 320"></svg>
+  <p class="cap">φ<sub>G</sub> : auto-gravité de la superposition. φ<sub>horloge</sub> : temps propre lisible par l'horloge interne. Faire varier Δx déplace le point sur une droite de pente −1 ; le quadrant Q4 n'est accessible que si T<sub>obs</sub> ≥ Y·√(T<sub>horloge</sub>·T<sub>g</sub>).</p></div>
+</div>
+
+<footer>Formules : T<sub>C</sub> = R/c, T<sub>G</sub> = GM/c³, T<sub>P</sub> = √(ħG/c⁵), T<sub>Q</sub> = ħ/(mc²) ; X = T<sub>G</sub>/T<sub>C</sub>, Y = T<sub>P</sub>/T<sub>G</sub>, O = T<sub>obs</sub>/T<sub>C</sub>. Identités : T<sub>G</sub>·T<sub>Q</sub> = T<sub>P</sub>², XY = L<sub>P</sub>/R, XY² = λ̄<sub>C</sub>/R, X²Y = g/a<sub>P</sub>, Kepler O√X = 2π. Facteurs de temps propre dans l'interprétation de Schwarzschild. Constantes CODATA 2022. Points de fond : atlas temporel du papier (33 systèmes, sources dans atlas_temporel.csv). Les préréglages quantiques reprennent des ordres de grandeur publiés. F. Vronsky, 2026, CC BY-NC-SA 4.0.</footer>
+</div>
+
+<script>
+const ATLAS = [["Électron (échelle de Compton réduite)","quantique",-44.7565,22.3783,null,0],["Proton (rayon de charge)","quantique",-38.8306,19.1143,null,0],["Hydrogène, orbite de Bohr","quantique",-43.6292,19.1141,2.935,0],["Hydrogène, raie à 21 cm (maser)","quantique",-43.6292,19.1141,9.6008,0],["Neutrons en superposition (COW 1975)","quantique",-52.4493,19.1137,4.9702,0],["Atomes Rb, 54 cm (2015)","quantique",-51.7023,17.1784,9.0625,0],["Atomes Cs piégés 20 s (2019)","quantique",-46.3765,16.994,15.1868,0],["Molécules 25 kDa (2019)","quantique",-42.9359,14.7196,12.9384,0],["Microdiamant 1e-14 kg (proposition BMV)","quantique",-37.5272,6.3377,12.4768,0],["Masse de Planck à la longueur de Planck","quantique",0.0,0.0,null,0],["Terre, surface (rotation sidérale)","Terre",-9.1573,-32.4384,6.6079,0],["Station spatiale internationale","Terre",-9.185,-32.4384,5.3911,1],["Satellite GPS","Terre",-9.7773,-32.4384,5.6869,1],["Lune autour de la Terre","Terre",-10.9326,-32.4437,6.2651,1],["Soleil, surface (rotation équatoriale)","Système solaire",-5.6732,-37.9608,5.9754,0],["Mercure autour du Soleil","Système solaire",-7.5935,-37.9608,4.5949,1],["Terre autour du Soleil","Système solaire",-8.0057,-37.9608,4.801,1],["Jupiter autour du Soleil","Système solaire",-8.722,-37.9608,5.1588,1],["Neptune autour du Soleil","Système solaire",-9.4838,-37.9608,5.5398,1],["Sirius B, surface (naine blanche)","Étoiles",-3.5739,-37.9685,null,0],["Sirius A–B, orbite","Étoiles",-8.8133,-38.4495,5.2048,1],["PSR J0740+6620, surface (étoile à neutrons)","Étoiles",-0.6057,-38.2788,1.844,0],["Pulsar du Crabe, surface","Étoiles",-0.7638,-38.1069,2.924,0],["PSR B1913+16, orbite","Étoiles",-5.6691,-38.4122,3.6327,1],["Double pulsar J0737−3039, orbite","Étoiles",-5.3618,-38.3736,3.4791,1],["Cygnus X-1, horizon","Étoiles",-0.301,-39.2871,null,0],["GW150914 à 40 Hz","Étoiles",-0.929,-39.7757,0.9616,1],["S2 autour de Sgr A*","Noyaux galactiques",-4.3869,-44.5942,2.9916,1],["Sgr A*, horizon","Noyaux galactiques",-0.301,-44.5942,null,0],["M87*, horizon","Noyaux galactiques",-0.301,-47.7737,null,0],["Soleil autour du centre galactique","Galaxie",-6.2189,-48.9757,3.9076,1],["Sphère de Hubble aujourd'hui","Cosmos",-0.301,-60.628,-0.022,0],["Sphère de Hubble au découplage (z ≈ 1090)","Cosmos",-0.301,-56.2622,-0.2195,0]];
+const c=299792458, G=6.6743e-11, hb=1.054571817e-34, eV=1.602176634e-19, GMsun=1.3271244e20, Msun=GMsun/G, AU=1.495978707e11, pc=3.0856775814913673e16, yr=3.15576e7;
+const TP=Math.sqrt(hb*G/c**5), MP=Math.sqrt(hb*c/G);
+const L=Math.log10, kep=(M,T)=>Math.cbrt(G*M*T*T/(4*Math.PI**2));
+const Me=3.986004418e14/G, Re=6.371e6;
+const PC=[
+ {n:"Terre (surface)",M:Me,R:Re,T:86164.09,k:"other"},
+ {n:"Terre autour du Soleil",M:Msun,R:1.000001018*AU,T:365.256363*86400,k:"orb"},
+ {n:"Satellite GPS",M:Me,R:26560e3,T:43082,k:"orb"},
+ {n:"Double pulsar",M:2.587*Msun,R:kep(2.587*Msun,8834.535),T:8834.535,k:"orb"},
+ {n:"S2 autour de Sgr A*",M:4.30e6*Msun,R:kep(4.30e6*Msun,16.046*yr),T:16.046*yr,k:"orb"},
+ {n:"GW150914 à 40 Hz",M:65.3*Msun,R:kep(65.3*Msun,0.05),T:0.025,k:"gw"},
+ {n:"PSR J0740+6620 (surface)",M:2.08*Msun,R:12.39e3,T:2.8858e-3,k:"other"},
+ {n:"Trou noir 10 M☉ à r_s",M:10*Msun,R:2*G*10*Msun/c**2,T:1e-3,k:"other"},
+];
+const PQ=[
+ {n:"Neutrons (COW)",m:1.6749e-27,dx:0.035,T:1.09e-5},
+ {n:"Atomes Rb, 54 cm",m:1.443e-25,dx:0.54,T:2.08},
+ {n:"Atomes Cs, 20 s",m:2.207e-25,dx:3.9e-6,T:20},
+ {n:"Molécules 25 kDa",m:4.15e-23,dx:2.66e-7,T:7.7e-3},
+ {n:"Microdiamant BMV",m:1e-14,dx:2.5e-4,T:2.5},
+];
+const CLK={"0":null,"nv":hb*2*Math.PI*2.87e9,"opt":2*eV,"th":8.4*eV};
+const $=id=>document.getElementById(id);
+const st={M:Me,R:Re,T:86164.09,k:"other",q:false,m:1.6749e-27,dx:0.035,h:"opt",name:"Terre (surface)"};
+
+function sup(n){return String(n).split("").map(ch=>"⁰¹²³⁴⁵⁶⁷⁸⁹"["0123456789".indexOf(ch)]||(ch==="-"?"⁻":ch)).join("");}
+function fmtE(x,d=2){ if(!isFinite(x)) return "—"; if(x===0) return "0"; const e=Math.floor(L(Math.abs(x))); if(e>=-2&&e<4) return (+x.toPrecision(d+2)).toString().replace(".",","); const m=x/10**e; return m.toFixed(d).replace(".",",")+"×10"+sup(e);}
+function fmtT(s){ if(!isFinite(s)) return "—"; const a=Math.abs(s); if(a>=yr*1e3) return fmtE(s/yr)+" ans"; if(a>=yr) return (s/yr).toPrecision(3).replace(".",",")+" ans"; if(a>=86400) return (s/86400).toPrecision(3).replace(".",",")+" j"; if(a>=1) return s.toPrecision(3).replace(".",",")+" s"; return fmtE(s)+" s";}
+function fmtM(kg){ return kg>=1e27? fmtE(kg/Msun)+" M☉" : fmtE(kg)+" kg";}
+function fmtR(m){ if(m>=pc*1e3) return fmtE(m/pc/1e3)+" kpc"; if(m>=AU*0.01) return fmtE(m/AU)+" UA"; if(m>=1e3) return fmtE(m/1e3)+" km"; return fmtE(m)+" m";}
+
+function presets(){
+  for(const p of PC){const b=document.createElement("button");b.textContent=p.n;b.type="button";b.onclick=()=>{Object.assign(st,{M:p.M,R:p.R,T:p.T,k:p.k,name:p.n,q:false});sync();};$("presetsC").append(b);p.el=b;}
+  for(const p of PQ){const b=document.createElement("button");b.textContent=p.n;b.type="button";b.className="q";b.onclick=()=>{Object.assign(st,{M:Me,R:Re,T:p.T,k:"other",q:true,m:p.m,dx:p.dx,name:p.n+" dans le champ terrestre"});sync();};$("presetsQ").append(b);p.el=b;}
+}
+function sync(){ $("sM").value=L(st.M); $("sR").value=L(st.R); $("sT").value=L(st.T); $("clock").value=st.k; $("qOn").checked=st.q; $("sm").value=L(st.m); $("sdx").value=L(st.dx); $("hclock").value=st.h; render(); }
+function read(){ st.M=10**+$("sM").value; st.R=10**+$("sR").value; st.T=10**+$("sT").value; st.k=$("clock").value; st.q=$("qOn").checked; st.m=10**+$("sm").value; st.dx=10**+$("sdx").value; st.h=$("hclock").value; st.name="Système réglé à la main"; render(); }
+["sM","sR","sT","clock","qOn","sm","sdx","hclock"].forEach(id=>$(id).addEventListener("input",read));
+
+function compute(){
+  const TC=st.R/c, TG=G*st.M/c**3, X=TG/TC, Y=TP/TG, O=st.T/TC, g=G*st.M/st.R**2;
+  const Cc=st.k==="orb"?2*Math.PI:st.k==="gw"?Math.PI:null;
+  const KT=Cc? O*Math.sqrt(X)/Cc : null;
+  const r={TC,TG,X,Y,O,g,gaP:X*X*Y,KT,Fs:2*X<=1?Math.sqrt(1-2*X):NaN,Fo:3*X<=1?Math.sqrt(1-3*X):NaN};
+  if(st.q){ const TQ=hb/(st.m*c**2), Yq=MP/st.m, TCdx=st.dx/c, dE=CLK[st.h];
+    const phiG=st.T/(Yq*Yq*TCdx), dtau=st.T*g*st.dx/c**2;
+    const phiC=dE? dE*dtau/hb : null; const Tg=c/g; const Tmin=dE? Yq*Math.sqrt((hb/dE)*Tg) : null;
+    Object.assign(r,{TQ,Yq,TCdx,phiG,dtau,phiC,Tg,Tmin,ident:(G*st.m/c**3)*TQ/TP**2}); }
+  return r;
+}
+function cell(k,v,s){return `<div class="cell"><div class="k">${k}</div><div class="v">${v}</div>${s?`<div class="s">${s}</div>`:""}</div>`;}
+function render(){
+  for(const p of PC) p.el.setAttribute("aria-pressed",String(p.n===st.name));
+  for(const p of PQ) p.el.setAttribute("aria-pressed",String(st.name.startsWith(p.n)));
+  $("oM").textContent=fmtM(st.M); $("oR").textContent=fmtR(st.R); $("oT").textContent=fmtT(st.T);
+  $("om").textContent=fmtE(st.m)+" kg"; $("odx").textContent=fmtR(st.dx); $("qBox").hidden=!st.q;
+  const r=compute(); $("name").textContent=st.name;
+  let h="";
+  h+=cell("X = T<sub>G</sub>/T<sub>C</sub>",fmtE(r.X),"compacité GM/(Rc²)");
+  h+=cell("Y = T<sub>P</sub>/T<sub>G</sub>",fmtE(r.Y),"M<sub>P</sub>/M");
+  h+=cell("O = T<sub>obs</sub>/T<sub>C</sub>",fmtE(r.O),"horloge observée");
+  h+=cell("X²Y = g/a<sub>P</sub>",fmtE(r.gaP),"g = "+fmtE(r.g)+" m/s²");
+  h+=cell("√(1−2X), horloge immobile",isFinite(r.Fs)?r.Fs.toFixed(10).replace(".",","):"hors domaine","Schwarzschild");
+  h+=cell("√(1−3X), orbite circulaire",isFinite(r.Fo)?r.Fo.toFixed(10).replace(".",","):"hors domaine","Schwarzschild");
+  if(r.KT!==null){ h+=cell("K<sub>T</sub> = T<sub>obs</sub>/T<sub>Kepler</sub>",r.KT.toFixed(5).replace(".",","),"A<sub>T</sub> = "+fmtE(r.KT-1)+" ; r<sub>T</sub> = ln K<sub>T</sub> = "+fmtE(Math.log(r.KT))); }
+  if(st.q){
+    h+=cell("T<sub>Q</sub> = ħ/(mc²)",fmtT(r.TQ),"temps de Compton réduit");
+    h+=cell("T<sub>G</sub>(m)·T<sub>Q</sub>/T<sub>P</sub>²",r.ident.toFixed(6).replace(".",","),"identité exacte");
+    h+=cell("φ<sub>G</sub> = T<sub>obs</sub>/(Y²·T<sub>C</sub>(Δx))",fmtE(r.phiG),"auto-gravité de la superposition");
+    h+=cell("Δτ potentiel",fmtE(r.dtau)+" s","majorant T<sub>obs</sub>·gΔx/c²");
+    if(r.phiC!==null){ h+=cell("φ<sub>horloge</sub> = ΔE·Δτ/ħ",fmtE(r.phiC),"temps propre lisible (majorant)");
+      h+=cell("Durée minimale pour Q4",fmtT(r.Tmin),"Y·√(T<sub>horloge</sub>·T<sub>g</sub>), indépendante de Δx"); }
+  }
+  $("rel").innerHTML=h;
+  const f=[];
+  if(r.X>=0.5) f.push(["hot","R ≤ r_s (interprétation de Schwarzschild)"]);
+  else if(r.X>1/6) f.push(["hot","Entre la dernière orbite stable et r_s (Schwarzschild)"]);
+  else if(r.X<1e-4) f.push(["info","X < 10⁻⁴ : Newton suffit à 10⁻⁴ près"]);
+  else f.push(["info","10⁻⁴ ≤ X ≤ 1/6"]);
+  if(r.Y>1) f.push(["info","Masse sous-planckienne (Y > 1)"]); else f.push(["info","Masse supérieure à la masse de Planck (Y < 1)"]);
+  if(r.KT!==null){ const d=Math.abs(Math.log(r.KT)); f.push(d<0.01?["ok","Sur le calque de Kepler (|r_T| < 0,01)"]:["hot","Écart au calque : r_T = "+fmtE(Math.log(r.KT))]); }
+  if(st.q){ const q=(r.phiG>=1?1:0)+(r.phiC!==null&&r.phiC>=1?2:0); const names=["Q1 : quantique ordinaire","Q3 : auto-gravité pertinente","Q2 : temps propre lisible","Q4 : les deux phases ≥ 1"];
+    f.push([q===0?"info":"ok",names[q]+(r.phiC===null?" (aucune horloge interne choisie)":"")]); }
+  $("flags").innerHTML=f.map(([k,t])=>`<span class="chip ${k}">${t}</span>`).join("");
+  ladder(r); map1(r); map2(r); map3(r);
+}
+
+const NS="http://www.w3.org/2000/svg";
+function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;return e;}
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const CATC={"quantique":"--ok","Terre":"--accent","Système solaire":"--accent","Étoiles":"--hot","Noyaux galactiques":"--hot","Galaxie":"--muted","Cosmos":"--ink"};
+
+function ladder(r){
+  const s=$("ladder"); s.innerHTML=""; const x0=30,x1=740,lo=-45,hi=20, X=v=>x0+(v-lo)/(hi-lo)*(x1-x0);
+  s.append(el("line",{x1:x0,x2:x1,y1:52,y2:52,stroke:css("--line"),"stroke-width":2}));
+  for(let e=lo;e<=hi;e+=5){s.append(el("line",{x1:X(e),x2:X(e),y1:48,y2:56,stroke:css("--line")}));s.append(el("text",{x:X(e),y:74,"text-anchor":"middle"},"10"+sup(e)));}
+  s.append(el("text",{x:x1,y:88,"text-anchor":"end"},"secondes (échelle logarithmique)"));
+  const pts=[["TP",TP,css("--muted")],["TG",r.TG,css("--accent")],["TC",r.TC,css("--accent")],["Tobs",st.T,css("--hot")]];
+  if(st.q) pts.push(["TQ",r.TQ,css("--ok")]);
+  pts.sort((a,b)=>a[1]-b[1]); let last=-1e9,row=0;
+  for(const [n,v,col] of pts){ const xv=Math.min(x1,Math.max(x0,X(L(v)))); row=(xv-last<46)?(row+1)%2:0; last=xv;
+    s.append(el("circle",{cx:xv,cy:52,r:6,fill:col}));
+    s.append(el("text",{x:xv,y:row?14:32,"text-anchor":"middle",class:"lab",style:`fill:${col};font-weight:600`},n));
+    s.append(el("line",{x1:xv,x2:xv,y1:row?18:36,y2:46,stroke:col,"stroke-width":1}));}
+}
+function frame(s,xr,yr,xl,yl,tx,ty){
+  s.innerHTML=""; const m={l:46,r:12,t:12,b:38}, W=420,H=320;
+  const X=v=>m.l+(v-xr[0])/(xr[1]-xr[0])*(W-m.l-m.r), Y=v=>H-m.b-(v-yr[0])/(yr[1]-yr[0])*(H-m.t-m.b);
+  const cid="c"+s.id; const cp=el("clipPath",{id:cid}); cp.append(el("rect",{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b})); s.append(cp);
+  for(const t of tx){s.append(el("line",{x1:X(t),x2:X(t),y1:m.t,y2:H-m.b,stroke:css("--grid")}));s.append(el("text",{x:X(t),y:H-m.b+14,"text-anchor":"middle"},t));}
+  for(const t of ty){s.append(el("line",{x1:m.l,x2:W-m.r,y1:Y(t),y2:Y(t),stroke:css("--grid")}));s.append(el("text",{x:m.l-6,y:Y(t)+4,"text-anchor":"end"},t));}
+  s.append(el("text",{x:(m.l+W-m.r)/2,y:H-4,"text-anchor":"middle"},xl));
+  s.append(el("text",{x:12,y:(m.t+H-m.b)/2,"text-anchor":"middle",transform:`rotate(-90 12 ${(m.t+H-m.b)/2})`},yl));
+  const g=el("g",{"clip-path":`url(#${cid})`}); s.append(g);
+  return {X,Y,g,inX:v=>v>=xr[0]&&v<=xr[1],inY:v=>v>=yr[0]&&v<=yr[1],m,W,H};
+}
+function line(f,x1,y1,x2,y2,col,dash,w){f.g.append(el("line",{x1:f.X(x1),y1:f.Y(y1),x2:f.X(x2),y2:f.Y(y2),stroke:col,"stroke-width":w||1.2,"stroke-dasharray":dash||""}));}
+function you(s,f,x,y,label){
+  const cx=Math.max(f.m.l,Math.min(f.W-f.m.r,f.X(x))), cy=Math.max(f.m.t,Math.min(f.H-f.m.b,f.Y(y)));
+  const out=!(f.inX(x)&&f.inY(y));
+  s.append(el("circle",{cx,cy,r:9,fill:"none",stroke:css("--hot"),"stroke-width":2.5,"stroke-dasharray":out?"3 3":""}));
+  s.append(el("circle",{cx,cy,r:3,fill:css("--hot")}));
+  s.append(el("text",{x:cx+(cx>300?-12:12),y:cy-10,"text-anchor":cx>300?"end":"start",class:"lab",style:`fill:${css("--hot")};font-weight:600`},label+(out?" (hors cadre)":"")));
+}
+function map1(r){
+  const s=$("map1"); const f=frame(s,[-56,1],[-2,30],"log₁₀ X","log₁₀ O",[-50,-40,-30,-20,-10,0],[0,10,20,30]);
+  line(f,-56,L(2*Math.PI)+28,1,L(2*Math.PI)-0.5,css("--ink"));
+  line(f,-56,L(Math.PI)+28,1,L(Math.PI)-0.5,css("--ink"),"5 4",1);
+  line(f,L(1/6),-2,L(1/6),30,css("--hot"),"2 3",1);
+  for(const p of ATLAS) if(p[4]!==null) f.g.append(el(p[5]?"circle":"rect",p[5]?{cx:f.X(p[2]),cy:f.Y(p[4]),r:3.2,fill:css(CATC[p[1]])}:{x:f.X(p[2])-3,y:f.Y(p[4])-3,width:6,height:6,fill:css(CATC[p[1]])}));
+  s.append(el("text",{x:f.X(-30),y:f.Y(17.8),class:"lab",transform:`rotate(-24 ${f.X(-30)} ${f.Y(17.8)})`},"Kepler O√X = 2π"));
+  you(s,f,L(r.X),L(r.O),"ici");
+}
+function map2(r){
+  const s=$("map2"); const f=frame(s,[-56,3],[-65,25],"log₁₀ X","log₁₀ Y",[-50,-40,-30,-20,-10,0],[-60,-40,-20,0,20]);
+  f.g.append(el("rect",{x:f.X(L(0.5)),y:f.m.t,width:f.W-f.m.r-f.X(L(0.5)),height:f.H-f.m.b-f.m.t,fill:css("--shade")}));
+  line(f,L(0.5),-65,L(0.5),25,css("--hot")); line(f,L(1/6),-65,L(1/6),25,css("--hot"),"4 3",1);
+  line(f,-56,0,3,0,css("--muted"),"2 3",1); line(f,-56,28,3,-1.5,css("--accent")); line(f,-25,25,3,-3,css("--muted"),"6 3 2 3",1);
+  for(const p of ATLAS) f.g.append(el("circle",{cx:f.X(p[2]),cy:f.Y(p[3]),r:3,fill:css(CATC[p[1]])}));
+  s.append(el("text",{x:f.X(-54),y:f.Y(21),class:"lab",style:`fill:${css("--accent")}`},"Compton XY² = 1"));
+  s.append(el("text",{x:f.X(-54),y:f.Y(1.5),class:"lab"},"masse de Planck Y = 1"));
+  s.append(el("text",{x:f.X(-9),y:f.Y(-60),class:"lab",style:`fill:${css("--hot")}`},"R < r_s →"));
+  you(s,f,L(r.X),L(r.Y),"ici");
+}
+function map3(r){
+  const s=$("map3"); const f=frame(s,[-42,6],[-14,6],"log₁₀ φ_G (auto-gravité)","log₁₀ φ_horloge (temps propre)",[-40,-30,-20,-10,0],[-12,-8,-4,0,4]);
+  f.g.append(el("rect",{x:f.X(0),y:f.m.t,width:f.W-f.m.r-f.X(0),height:f.Y(0)-f.m.t,fill:css("--accent-soft")}));
+  line(f,0,-14,0,6,css("--ink"),"",1); line(f,-42,0,6,0,css("--ink"),"",1);
+  const dE=CLK[st.h]||2*eV, g=9.81;
+  for(const p of PQ){ const pg=x=>L(p.T*G*p.m*p.m/(hb*x)), pc=x=>L(dE*p.T*g*x/(c*c)/hb);
+    line(f,pg(p.dx/100),pc(p.dx/100),pg(p.dx*100),pc(p.dx*100),css("--line"),"",1.2);
+    f.g.append(el("circle",{cx:f.X(pg(p.dx)),cy:f.Y(pc(p.dx)),r:3.5,fill:css("--ok")}));
+    s.append(el("text",{x:f.X(pg(p.dx))+5,y:f.Y(pc(p.dx))-5,class:"lab"},p.n.split(",")[0])); }
+  for(const [x,y,t] of [[-41,-13,"Q1"],[-41,5,"Q2"],[0.6,-13,"Q3"],[0.6,5,"Q4"]]) s.append(el("text",{x:f.X(x),y:f.Y(y),class:"lab"},t));
+  if(st.q && r.phiC!==null) you(s,f,L(r.phiG),L(r.phiC),"ici");
+  else s.append(el("text",{x:f.W-f.m.r-4,y:f.H-f.m.b-8,"text-anchor":"end"},st.q?"choisis une horloge interne":"active une particule pour t'y placer"));
+  s.append(el("text",{x:f.m.l+4,y:f.m.t+24},"segments : horloge "+({"nv":"NV","opt":"optique","th":"thorium"}[st.h]||"optique")));
+}
+presets(); sync();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",render);
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+</script>
+</body></html>
