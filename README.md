@@ -1,0 +1,2 @@
+# Temporal-fingerprints-a-logarithmic-frame-of-time-scales-for-gravitational-and-quantum-systems
+Methods paper, Python code and atlas for temporal fingerprints: Planck, gravitational, light-crossing and observed times of any system, mapped to a 3D log-space where power laws are hyperplanes and deviations are signed distances. FR/EN PDFs, symbolic checks, 33-system atlas, offline HTML bench. DOI 10.5281/zenodo.23106130
