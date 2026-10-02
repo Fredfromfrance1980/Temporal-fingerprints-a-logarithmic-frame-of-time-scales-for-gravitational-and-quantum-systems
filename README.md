@@ -6,7 +6,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23106130.svg)](https://doi.org/10.5281/zenodo.23106130)
 
 **Frédérick Vronsky** — Independent researcher in theoretical cosmology / Chercheur indépendant en cosmologie théorique, Toulouse
-ORCID: [0009-0003-5719-9604](https://orcid.org/0009-0003-5719-9604) · Version 1.0 · October / octobre 2026 · CC BY-NC-SA 4.0
+ORCID: [0009-0003-5719-9604](https://orcid.org/0009-0003-5719-9604) · Version 1.1 · October / octobre 2026 · CC BY-NC-SA 4.0
 
 [English](#english) · [Français](#français)
 
@@ -47,15 +47,15 @@ In the space of the logarithms of these times:
 
 | Path | Contents |
 |---|---|
-| `papier/empreintes_en.pdf`, `papier/empreintes_fr.pdf` | the paper in English and French (16 pages each) |
+| `Temporal_fingerprints_EN.pdf`, `Empreintes_temporelles_FR.pdf` | the paper in English and French (16 pages each) |
 | `papier/*.tex` | XeLaTeX sources |
 | `code/empreintes.py` | Python module: fingerprint, relative state, log matrix, hyperplanes and residuals, kernel elimination, uncertainty propagation, quantum extension, Hubble sphere |
 | `code/test_empreintes.py` | numerical tests of the paper's identities (10 tests) |
 | `code/verifier_equations.py` | symbolic check (sympy) of every equation (36 checks) |
 | `code/reproduire_papier.py` | recomputes every number, the atlas and the figures |
-| `code/atlas.py`, `code/atlas_temporel.csv` | temporal atlas of 33 systems, with sources |
+| `atlas_temporel.csv`, `code/atlas.py` | temporal atlas of 33 systems, with sources (regenerated in `code/`) |
 | `code/figures.py` | figures in French and English |
-| `banc/banc_empreintes.html` | interactive bench |
+| `banc_empreintes.html` | interactive bench |
 
 **The atlas (`atlas_temporel.csv`)** covers 33 systems, from the proton to the Hubble sphere: Earth, Solar System, pulsars, black holes, quantum experiments and cosmos. Each row gives:
 - M, R and T<sub>obs</sub> (when one exists), with the nature of T<sub>obs</sub> and the definition and status of R;
@@ -127,15 +127,15 @@ Dans l'espace des logarithmes de ces temps :
 
 | Chemin | Contenu |
 |---|---|
-| `papier/empreintes_fr.pdf`, `papier/empreintes_en.pdf` | l'article en français et en anglais (16 pages chacun) |
+| `Empreintes_temporelles_FR.pdf`, `Temporal_fingerprints_EN.pdf` | l'article en français et en anglais (16 pages chacun) |
 | `papier/*.tex` | sources XeLaTeX |
 | `code/empreintes.py` | module Python : empreinte, état relatif, matrice logarithmique, hyperplans et résidus, élimination par noyau, propagation des incertitudes, extension quantique, sphère de Hubble |
 | `code/test_empreintes.py` | tests numériques des identités du papier (10 tests) |
 | `code/verifier_equations.py` | vérification symbolique (sympy) de chaque équation (36 vérifications) |
 | `code/reproduire_papier.py` | recalcule tous les nombres, l'atlas et les figures |
-| `code/atlas.py`, `code/atlas_temporel.csv` | atlas temporel de 33 systèmes, avec sources |
+| `atlas_temporel.csv`, `code/atlas.py` | atlas temporel de 33 systèmes, avec sources (régénéré dans `code/`) |
 | `code/figures.py` | figures en français et en anglais |
-| `banc/banc_empreintes.html` | banc interactif |
+| `banc_empreintes.html` | banc interactif |
 
 **L'atlas (`atlas_temporel.csv`)** couvre 33 systèmes, du proton à la sphère de Hubble : Terre, Système solaire, pulsars, trous noirs, expériences quantiques et cosmos. Chaque ligne donne :
 - M, R et T<sub>obs</sub> (quand il en existe une), avec la nature de T<sub>obs</sub>, la définition et le statut de R ;
@@ -180,7 +180,7 @@ See also / voir aussi `CITATION.cff`.
 
 ## Licence
 
-Creative Commons Attribution–NonCommercial–ShareAlike 4.0 International (CC BY-NC-SA 4.0). See / voir `LICENSE.md`.
+Creative Commons Attribution–NonCommercial–ShareAlike 4.0 International (CC BY-NC-SA 4.0). See / voir `LICENCE`.
 
 ## Statement of assistance · Déclaration d'assistance
 
