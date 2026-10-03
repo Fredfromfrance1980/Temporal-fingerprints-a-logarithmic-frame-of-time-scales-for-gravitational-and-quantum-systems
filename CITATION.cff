@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Si vous utilisez ce travail, merci de le citer. / If you use this work, please cite it."
+title: "Empreintes temporelles : un référentiel logarithmique des échelles de temps pour les systèmes gravitationnels et quantiques / Temporal fingerprints: a logarithmic reference frame of time scales for gravitational and quantum systems"
+authors:
+  - family-names: Vronsky
+    given-names: Frédérick
+    orcid: "https://orcid.org/0009-0003-5719-9604"
+    affiliation: "Chercheur indépendant, Toulouse"
+version: "2.0"
+date-released: 2026-10-02
+license: CC-BY-NC-SA-4.0
+keywords: [time scales, dimensional analysis, Planck time, Compton time, compactness, general relativity]
+doi: 10.5281/zenodo.23116283
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23116283
+    description: "Zenodo deposit, version 2.0"
